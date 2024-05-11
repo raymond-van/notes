@@ -26,5 +26,5 @@ Varying levels of management
 - e.g. Heroku
 **Software-as-a-service**
 - consume the app, e.g. using netflix, gmail
-![](Pasted%20image%2020220806160219.png)
+![](../../../../images/Pasted%20image%2020220806160219.png)
 Red is delegated to cloud provider, e.g. EC2

@@ -142,7 +142,7 @@ mutation {
 - root object is the OpenAPI Object
 	- mandatory fields: `openapi` (version), `info` (about the API) and one of `paths` (endpoints, incl. parameters and possible responses), `components`, `webhooks`
 - Paths is the container for all operations supposed by the API
-![](Pasted%20image%2020240427172403.png)
+![](../../../images/Pasted%20image%2020240427172403.png)
 - other important objects/fields include: content (describing type of data), Parameter object (inputs to request), Server object (base URLs where API is being served)
 ### Swagger
 - Tools (editor, UI, Codegen) built around OAS
@@ -184,7 +184,7 @@ mutation {
 	- **Client**: The client is the _application_ that wants to access the _user_’s account. Before it may do so, it must be authorized by the user, and the authorization must be validated by the API.
 	- **Resource Server**: The resource server hosts the protected user accounts.
 	- **Authorization Server**: The authorization server verifies the identity of the _user_ then issues access tokens to the _application_.
-![](Pasted%20image%2020240427183912.png)
+![](../../../images/Pasted%20image%2020240427183912.png)
 #### Flow
 1. **"Login with..."** You see the option to sign in to an app (App A) using your Google/Facebook/etc. account.
 2. **Consent:** When you click "Login with Google ", you're redirected to Google's authorization server. Google asks if you'll allow App A to access specific parts of your Google data (like your profile info).

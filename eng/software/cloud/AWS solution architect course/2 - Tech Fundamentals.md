@@ -7,13 +7,13 @@
 		- how data is moved from point a to point b
 	- Host layers (Transport -  Application)
 		- how data is chopped up for transport, reassembled and formatted
-![](Pasted%20image%2020220809224929.png)
+![](../../../../images/Pasted%20image%2020220809224929.png)
 ##### Layer 1 - Physical 
 - Focuses on the physical shared medium and the standards for transmitting onto / receiving from the medium (e.g. specific network card/cable or wifi card/radio frequency)
 - Green things represent network interface cards
-![](Pasted%20image%2020220809225230.png)
+![](../../../../images/Pasted%20image%2020220809225230.png)
 - a certain voltage can be defined as a 1 bit or 0 bit, then pc A can emit voltages that represent binary code to pc B
-![](Pasted%20image%2020220809230012.png)
+![](../../../../images/Pasted%20image%2020220809230012.png)
 - A hub can be used to communicate with multiple devices
 - Media access control
 	- controlling which device can communicate with others
@@ -24,7 +24,7 @@
 - simply transmits raw data on the physical medium
 ##### Layer 2 - Data Link 
 - e.g. Ethernet
-![](Pasted%20image%2020220813105910.png)
+![](../../../../images/Pasted%20image%2020220813105910.png)
 - Frames (orange dotted box)
 	- format for sending information over L2 network
 	- frames are transmitted to layer 1 / physical medium which means it gets converted to voltages/light/radio frequency depending on the medium
@@ -57,18 +57,18 @@ Collision Detection (CD)
 - if a collision is detected a jam signal is transmitted
 - backoff period is when no device can send frames
 - at end of backoff period, device can resend
-![](Pasted%20image%2020220813112833.png)
+![](../../../../images/Pasted%20image%2020220813112833.png)
 Hubs
 - are layer 1 devices (thus doesn't understand layer 2)
 - non destination devices will check destination MAC address, will see that they are not the intended device and discard the frame
 - the destination device, will pass on and interpret the layer 2 frame
 - Collisions can still occur because hubs are layer 1 devices and will impact all devices
-![](Pasted%20image%2020220813113849.png)
+![](../../../../images/Pasted%20image%2020220813113849.png)
 Switches
 - are layer 2 devices with layer 2 software so they understand frames and MAC addresses
 - Stores frames and fowards if valid, then discards after forwarding
 - doesn't forward collisions
-![](Pasted%20image%2020220813114516.png)
+![](../../../../images/Pasted%20image%2020220813114516.png)
 Layer 2 gives us:
 - identificable devices via MAC addresses
 - Media access control 
@@ -77,9 +77,9 @@ Layer 2 gives us:
 - Broadcast (1:all)
 - Switches (gives us ability to scale)
 Layer 2 only gives us LAN communication via switches or communication via direct point-to-point links using the SAME layer 2 protocol (expensive) 
-![](Pasted%20image%2020220813115606.png)
+![](../../../../images/Pasted%20image%2020220813115606.png)
 ##### Layer 3 - Network 
-![](Pasted%20image%2020220813121000.png)
+![](../../../../images/Pasted%20image%2020220813121000.png)
 - Responsibility of layer 3 is to get **data** from 1 location to another
 - Internet Protocol (IP) is a L3 protocol which adds cross-network **IP addressing** and **routing** to move data between LANs without direct point-to-point links
 - IP Packets are moved step by step from **source MAC address** to the **destination MAC address** via *intermediate* networks
@@ -108,15 +108,15 @@ Layer 2 only gives us LAN communication via switches or communication via direct
 			- so at the L3 destination, it knows which L4 protocol to transmit to
 			- e.g.: TCP (6), ICMP/Pings (1), UDP (17)
 		- v6 packets provide a larger IP address space
-![](Pasted%20image%2020220813121841.png)
+![](../../../../images/Pasted%20image%2020220813121841.png)
 **IP Addressing (v4)**
 - Dotted-decimal notation - 4 x 0-255 value
 - IP addresses need to be globally unique
-![](Pasted%20image%2020220817135127.png)
+![](../../../../images/Pasted%20image%2020220817135127.png)
 **Subnet Mask**
-![](Pasted%20image%2020220817135209.png)
+![](../../../../images/Pasted%20image%2020220817135209.png)
 **Routes and Route Tables**
-![](Pasted%20image%2020220817135449.png)
+![](../../../../images/Pasted%20image%2020220817135449.png)
 - The 24 bit slash prefix (52.217.13.0/24) indicates how specific the match is
 	- 32 bit prefix indicates a singular IP address (indicates 52.217.13) is the network?
 	- 16 bit prefix indicates 52.217 is network and 13.0 is the host 
@@ -128,7 +128,7 @@ Layer 2 only gives us LAN communication via switches or communication via direct
 - runs between layer 3 and layer 2
 - if destination is local: there will be 1 L2 frame per packet
 - Else if destination is remote: there could be many L2 frames per packet
-![](Pasted%20image%2020220817140430.png)
+![](../../../../images/Pasted%20image%2020220817140430.png)
 **IP Routing**
 - R1 = router, GW - gateway, P1 = packet, F1 = frame, D1 = device
 - For d2 -> d3:
@@ -138,9 +138,9 @@ Layer 2 only gives us LAN communication via switches or communication via direct
 	- routers OTOH, route that packet to somewhere else using route tables
 	- f3 has r2 as destination mac (using ARP), p2 is unchanged
 	- L3 packet remains unchanged, but L2 frames constantly get removed and created, encapsulating the L3 packet
-	![](Pasted%20image%2020220817141425.png)
+	![](../../../../images/Pasted%20image%2020220817141425.png)
 **L3 Summary**
-![](Pasted%20image%2020220817141735.png)
+![](../../../../images/Pasted%20image%2020220817141735.png)
 ### Layer 4 - Transport 
 **L3 Problems**
 - In L3, every single packet delivery is independent of one another
@@ -148,7 +148,7 @@ Layer 2 only gives us LAN communication via switches or communication via direct
 - L3 packets only have a source and destination IP address, no method of splitting by application or channel
 	- thus, can't have two apps running on source, communicating with two apps at the destination (no method of distinguishing between the applications)
 - no flow control - over saturating the destination results in packet loss
-![](Pasted%20image%2020220817142625.png)
+![](../../../../images/Pasted%20image%2020220817142625.png)
 #### TCP & UDP
 - TCP/IP means TCP running on top of L3 IP 
 	- TCP is slower but more reliable
@@ -175,7 +175,7 @@ Layer 2 only gives us LAN communication via switches or communication via direct
 	- error checking and for retransmission if a segment gets lost
 - urgent pointer
 	- can give priority to certain packets/segments?
-	![](Pasted%20image%2020220818125012.png)
+	![](../../../../images/Pasted%20image%2020220818125012.png)
 ### Transmission Control Protocol (TCP)
 - bidirectional communication channel/stream
 	- channel is created using segments
@@ -184,10 +184,10 @@ Layer 2 only gives us LAN communication via switches or communication via direct
 		- Initiating: source -> dest
 		- Response:  above reversed
 - ephemeral port = temporary
-![](Pasted%20image%2020220818130026.png)
+![](../../../../images/Pasted%20image%2020220818130026.png)
 #### TCP 3-way Handshake
 - used to establish a connection between a client and server
-![](Pasted%20image%2020220818130310.png)
+![](../../../../images/Pasted%20image%2020220818130310.png)
 #### Sessions & State
 - Firewalls
 	- Stateless firewalls don't understand the state of a connection (initiating vs. Response)
@@ -198,24 +198,24 @@ Layer 2 only gives us LAN communication via switches or communication via direct
 		- needs one rule, the opposite direction is automatically allowed
 		- understands layer 4
 		- In AWS: Security groups
-![](Pasted%20image%2020220818130842.png)
+![](../../../../images/Pasted%20image%2020220818130842.png)
 
 ### Network Address Translation (NAT)
 - designed to overcome IPv4 address shortages
 - Private addresses (e.g. 10.0.0.0) can't be routed over the internet so we use NAT to translate to public
 - PAT
 	- used at home, differentiates devices using ports
-![](Pasted%20image%2020220818132556.png)
+![](../../../../images/Pasted%20image%2020220818132556.png)
 #### Static NAT
 - Green = Private network, Blue = Router(default gateway)/NAT device, Red = Public Network
 - Want to communicate with public network from private network
 - AWS: Internet Gateway (IGW)
-![](Pasted%20image%2020220818133413.png)
+![](../../../../images/Pasted%20image%2020220818133413.png)
 #### Dynamic NAT
 - used when there are a lot of private ip addresses and not enough public ip addresses
-![](Pasted%20image%2020220818133651.png)
+![](../../../../images/Pasted%20image%2020220818133651.png)
 #### Port Address Translation (PAT)
 - Each client gets a new public source port, gets stored in NAT table
 - router at home uses PAT
 - can't initiate traffic to these private devices because there would be no entry in the NAT table that would tell us how to translate from public to private
-![](Pasted%20image%2020220818133413.png)
+![](../../../../images/Pasted%20image%2020220818133413.png)

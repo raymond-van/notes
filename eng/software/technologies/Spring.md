@@ -12,7 +12,7 @@
 - can easily replace a bean without affecting the rest of the app
 ##### Autowiring
 - Spring automatically discovers dependencies to inject, reducing the amount of xml you need to write
-- ![](Pasted%20image%2020240325185049.png)
+- ![](../../../images/Pasted%20image%2020240325185049.png)
 - **`context:annotation-config`:** This is essential to activate the processing of Spring annotations like `@Service` and `@Autowired`.
 - **`context:component-scan`**: Instructs Spring to scan the `com.example` package and automatically discover classes annotated with `@Component`, `@Service`, `@Repository`, etc., turning them into Spring beans.
 #### Dependency Injection
@@ -25,7 +25,7 @@
 - Dependency injection is IoC
 #### MVC
 - enables separate of concerns
-![](Pasted%20image%2020240325200839.png)
+![](../../../images/Pasted%20image%2020240325200839.png)
 ##### Model
 - represents the data
 ##### View
@@ -72,4 +72,4 @@
 - Database Connectivity: If you include a JPA library (e.g., Hibernate), Spring Boot will try to configure a basic datasource connection based on your environment variables or application properties.
 - Embedded Servers: Spring Boot ships with several embedded servers like Tomcat or Jetty. By default, it will set up and run one of these for your application, eliminating the need for a separate server in development.
 - Spring MVC: If you include web-related libraries, Spring Boot will configure a basic Spring MVC application context, including features like automatic view resolution and exception handling
-![](Pasted%20image%2020240327220815.png)
+![](../../../images/Pasted%20image%2020240327220815.png)
