@@ -1,0 +1,67 @@
+# DDP
+- https://arxiv.org/pdf/2006.15704
+![](Pasted%20image%2020240519140305.png)
+- implemented as an `nn.Module` which takes the local model as a constructor argument and synchronizes gradients in backward pass
+	- local model is replaced with a distributed one which intercepts `forward()` calls to perform necessary actions
+- each process (GPU) has its own local model replica and local optimizer
+	- all model replicas start from the same state, see the same parameter gradients after every backward pass
+		- this enables all model replicas to arrive at the same state at the end of every iteration
+	- generates gradients independently
+	- communicates gradients at each iteration to keep model replicas consistent
+		- gradients are communicated after backwards step and before the optimizer step to make saure that parameters of all model replicas are updated using the same set of gradients
+- near-linear scalability using 256 gpus
+- performance of distributing data among model replicas needs to be mathematically equivalent to the performance if training was done locally without replicas
+- communication is the dominant latency contributor
+- Communication Libraries 
+	- implement collective operations
+	- NCCL (Nvidia): GPU-backend
+		- much faster than Gloo
+	- Gloo: CPU-backend
+- Parameter averaging
+	- instead of synchronizing gradients, the average of the parameters are taken after the optimizer updates the weights
+	- can produce different results compared to training locally without distribution because **not mathematically equivalent to training locally**
+-  DataParallel vs. DistributedDataParallel vs. RPC
+	- DP: single-process multi-thread data parallelism on single-machine multi-GPU setup
+	- DDP: multi-process, multi-thread, multi-gpu, multi-machines
+	- RPC: model parallelism (e.g.: parameter server)
+- `ProcessGroup` 
+	- processes in a group work collectively
+	- wraps around NCCL, Gloo and MPI APIs for collective operations
+- `WORLD_SIZE`, `WORLD_RANK` and `LOCAL_RANK`
+	- "total number of GPUs in your cluster", "the ID of a GPU at the cluster level", and "the ID of a GPU at a node level"
+		- node -> single machine with potentially multiple GPUs
+## Gradient Reduction
+- process of averaging the local gradients calculated on each GPU (with different data) to create a single gradient that represents the entire dataset
+- DDP registers a hook on every gradient accumulator (parameter) that trigger after every backwards pass to perform gradient reduction 
+	- hooks get invoked by autograd engine for each parameter
+- AllReduce collective operation gets asynchrously used to calculate the average gradients on each parameter across all processes and distributes it back to each individual process
+- Naive solution implementation has two performance concerns:
+	- Collective communication performs poorly on small tensors, which will be especially prominent on large models with massive numbers of small parameters
+	- Separating gradient computation and synchronization loses out on the opportunity to overlap computation with communication 
+- basically the issues are: network latency and bandwidth limitations 
+## Gradient Bucketing
+- Groups multiple smaller gradient tensors into larger "buckets"
+	- DDP communicates these buckets rather than the smaller tensors
+	- DDP assigns a gradient tensor to a bucket based on its size and the current state of the buckets
+	- gradients are calculated and accumulated in their buckets
+- All gradient tensors belonging to the _same_ model parameter are always placed in the _same_ bucket
+	- DDP doesn't split gradients of a single parameter across multiple buckets
+- DDP never places gradients that directly depend on each other in different buckets
+	- bucket i launches AllReduce before bucket i + 1
+	- i.e. respects the depency graph
+	- does this with topological sort?
+	- creates buckets in reverse order of `model.parameters()`
+- when a bucket is full, DDP initiates an asynchronous AllReduce operation on the bucket
+- Overcomes the problem with communication numerous small gradient tensors individual
+- can be combined with gradient accumulation to reduce communication frequency
+- leads to higher throughput and lower latency
+- `bucket_cap_mb` controls bucket size in MBs (25mb default), hyperparameter
+	- can be optimized for training speed
+## Overlapping communication with computation
+- AllReduce operation on gradients can start before the local backward pass finishes
+- Can start when all contents in the same bucket are ready
+	- ready when all hooks in the same buckets have fired
+## Gradient Accumulation
+- instead of launching AllReduce in every iteration, the application can conduct n local training iterations before synchronizing gradients globally
+- also helpful if the input batch is too large to fit into a device, where the application could split one input batch into multiple microbatches, run local forward and backward passes on every micro-batch, and only launch gradient synchronization at the boundaries of large batches
+- uses bitmap to determine if parameter is unused
